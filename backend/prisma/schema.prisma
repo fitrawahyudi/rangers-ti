@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Model untuk tabel User
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String   @unique // Email harus unik
+  name      String? // Nama bersifat opsional (ditandai '?')
+  password  String // Kita akan simpan password yang sudah di-hash
+  createdAt DateTime @default(now())
+}
+
+enum Divisi {
+  VOLUNTEER
+  MC
+  PEMATERI
+  PEMBACA_DOA
+}
+
+enum Ketersediaan {
+  BERSEDIA
+  TIDAK
+}
+
+// Enum untuk status pendaftaran
+enum StatusPendaftaran {
+  PENDING
+  DITERIMA
+  DITOLAK
+}
+
+// Model untuk tabel Volunteer
+model Volunteer {
+  id       Int    @id @default(autoincrement())
+  email    String @unique // Email untuk login
+  password String // Password yang sudah di-hash
+
+  // Data Diri Volunteer
+  nama_lengkap  String
+  npm           String @unique // Nomor Induk Mahasiswa
+  angkatan      Int // Angkatan (misal: 2021, 2022)
+  program_studi String
+  no_wa         String // Nomor WhatsApp
+
+  // Pilihan Pendaftaran
+  divisi_pilihan   Divisi // Pilihan divisi pertama
+  alasan_bergabung String            @db.Text // Pakai @db.Text untuk teks panjang
+  status           StatusPendaftaran @default(PENDING)
+  bersedia         String
+
+  createdAt DateTime @default(now())
+}
