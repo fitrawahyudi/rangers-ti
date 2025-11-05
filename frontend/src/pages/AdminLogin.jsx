@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-const API_URL = "https://backend-rangers-ti.up.railway.app";
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:8080"
+    : import.meta.env.VITE_API_URL;
+
 function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
