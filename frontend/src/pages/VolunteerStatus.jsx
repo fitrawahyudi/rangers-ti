@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // Buat instance axios untuk volunteer
 const volunteerApi = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://backend-rangers-ti.up.railway.app/",
 });
 
 // Interceptor token
@@ -29,12 +29,7 @@ export default function VolunteerStatus() {
   const [systemDark, setSystemDark] = useState(false);
 
   // Ambil data dengan useSWR (refresh otomatis tiap 10 detik)
-  const {
-    data,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR("/volunteer/me", fetcher, {
+  const { data, error, isLoading, mutate } = useSWR("/volunteer/me", fetcher, {
     refreshInterval: 10000, // update tiap 10 detik
     revalidateOnFocus: true, // refresh lagi saat user balik ke tab
   });
@@ -65,8 +60,12 @@ export default function VolunteerStatus() {
   };
 
   const activeDark = darkMode ?? systemDark;
-  const themeClass = activeDark ? "bg-dark-custom text-light" : "bg-light text-dark";
-  const cardClass = activeDark ? "bg-dark-card text-light border-0" : "bg-white text-dark";
+  const themeClass = activeDark
+    ? "bg-dark-custom text-light"
+    : "bg-light text-dark";
+  const cardClass = activeDark
+    ? "bg-dark-card text-light border-0"
+    : "bg-white text-dark";
 
   const getStatusColor = (status) => {
     if (status === "DITERIMA") return "success";
@@ -76,14 +75,21 @@ export default function VolunteerStatus() {
   };
 
   const getStatusText = (status) => {
-    if (status === "PENDING") return "Data anda sedang kami verifikasi. harap tunggu informasi selanjutnya";
-    if (status === "DITERIMA") return "Selamat! Kamu diterima sebagai volunteer Rangers TI Batch 4 🎉";
+    if (status === "PENDING")
+      return "Data anda sedang kami verifikasi. harap tunggu informasi selanjutnya";
+    if (status === "DITERIMA")
+      return "Selamat! Kamu diterima sebagai volunteer Rangers TI Batch 4 🎉";
     if (status === "DITOLAK") return "Mohon maaf, kamu belum lolos 😔";
     return "";
   };
 
   if (isLoading) return <div className="text-center p-5">Memuat data...</div>;
-  if (error) return <div className="alert alert-danger text-center">Gagal mengambil data 😢</div>;
+  if (error)
+    return (
+      <div className="alert alert-danger text-center">
+        Gagal mengambil data 😢
+      </div>
+    );
   if (!data) return <div className="text-center p-5">Data tidak ditemukan</div>;
 
   const statusColor = getStatusColor(data.status);
@@ -105,7 +111,9 @@ export default function VolunteerStatus() {
         {/* HEADER */}
         <div
           className={`card-header d-flex justify-content-between align-items-center rounded-top-4 ${
-            activeDark ? "bg-primary-subtle text-light" : "bg-primary text-white"
+            activeDark
+              ? "bg-primary-subtle text-light"
+              : "bg-primary text-white"
           }`}
         >
           <h5 className="mb-0 fw-semibold">Status Pendaftaran Kamu</h5>
@@ -115,7 +123,9 @@ export default function VolunteerStatus() {
               onClick={() => setDarkMode(!activeDark)}
               title="Ganti Tema"
             >
-              <i className={`bi ${activeDark ? "bi-sun-fill" : "bi-moon-fill"}`}></i>
+              <i
+                className={`bi ${activeDark ? "bi-sun-fill" : "bi-moon-fill"}`}
+              ></i>
             </button>
             <button
               onClick={handleLogout}
@@ -128,7 +138,9 @@ export default function VolunteerStatus() {
 
         {/* BODY */}
         <div className="card-body text-center p-5">
-          <h2 className="fw-bold mb-1 animate__animated animate__fadeInDown">{data.nama}</h2>
+          <h2 className="fw-bold mb-1 animate__animated animate__fadeInDown">
+            {data.nama}
+          </h2>
           <p className="text-warning mb-4 animate__animated animate__fadeInDown animate__delay-1s">
             {data.email} | {data.npm}
           </p>
@@ -147,7 +159,9 @@ export default function VolunteerStatus() {
             >
               {data.status}
             </span>
-            <p className="mt-3 text-muted small">{getStatusText(data.status)}</p>
+            <p className="mt-3 text-muted small">
+              {getStatusText(data.status)}
+            </p>
 
             {/* === Jika DITERIMA tampilkan tombol WA === */}
             {data.status === "DITERIMA" && (

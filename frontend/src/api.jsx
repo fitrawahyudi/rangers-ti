@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: "http://localhost:5000" });
+const api = axios.create({
+  baseURL: "https://backend-rangers-ti.up.railway.app/",
+});
 
 // Tambahkan token (jika ada)
 api.interceptors.request.use(

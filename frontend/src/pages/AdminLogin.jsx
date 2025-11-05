@@ -1,9 +1,11 @@
 // frontend/src/pages/AdminLogin.jsx (Versi Bootstrap)
-
+import "dotenv/config";
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
+const API_URL =
+  process.env.VITE_API_URL || "https://backend-rangers-ti.up.railway.app/";
 function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ function AdminLogin() {
 
     try {
       // 1. Panggil API login admin
-      const response = await axios.post("http://localhost:5000/admin/login", {
+      const response = await axios.post(`${API_URL}/admin/login`, {
         username,
         password,
       });
