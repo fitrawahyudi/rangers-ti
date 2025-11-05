@@ -1,125 +1,237 @@
-// frontend/src/pages/VolunteerStatus.jsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import useSWR from "swr";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/dashboard-volunteer.css";
 import { useNavigate } from "react-router-dom";
 
-// Buat instance axios terpisah untuk volunteer
+// Buat instance axios untuk volunteer
 const volunteerApi = axios.create({
   baseURL: "http://localhost:5000",
 });
 
-// Interceptor untuk token volunteer
+// Interceptor token
 volunteerApi.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("volunteerToken"); // Ambil token volunteer
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-    }
+    const token = localStorage.getItem("volunteerToken");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-function VolunteerStatus() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+// Fungsi fetcher untuk SWR
+const fetcher = (url) => volunteerApi.get(url).then((res) => res.data);
 
+export default function VolunteerStatus() {
+  const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+  const [systemDark, setSystemDark] = useState(false);
+
+  // Ambil data dengan useSWR (refresh otomatis tiap 10 detik)
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR("/volunteer/me", fetcher, {
+    refreshInterval: 10000, // update tiap 10 detik
+    revalidateOnFocus: true, // refresh lagi saat user balik ke tab
+  });
+
+  // Kalau error karena token invalid → logout otomatis
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await volunteerApi.get("/volunteer/me"); // Panggil endpoint /me
-        setData(response.data);
-      } catch (err) {
-        setError(
-          "Gagal mengambil data atau sesi berakhir. Silakan login lagi."
-        );
-        // Handle token expired
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          localStorage.removeItem("volunteerToken");
-          navigate("/login");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [navigate]);
+    if (error?.response?.status === 401 || error?.response?.status === 403) {
+      localStorage.removeItem("volunteerToken");
+      navigate("/login");
+    }
+  }, [error, navigate]);
+
+  // Deteksi dark mode sistem
+  useEffect(() => {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+    setSystemDark(prefersDark.matches);
+    setDarkMode(prefersDark.matches);
+
+    const handleThemeChange = (e) => setSystemDark(e.matches);
+    prefersDark.addEventListener("change", handleThemeChange);
+
+    return () => prefersDark.removeEventListener("change", handleThemeChange);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("volunteerToken");
     navigate("/login");
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case "DITERIMA":
-        return "badge bg-success fs-5";
-      case "DITOLAK":
-        return "badge bg-danger fs-5";
-      case "PENDING":
-      default:
-        return "badge bg-warning text-dark fs-5";
-    }
+  const activeDark = darkMode ?? systemDark;
+  const themeClass = activeDark ? "bg-dark-custom text-light" : "bg-light text-dark";
+  const cardClass = activeDark ? "bg-dark-card text-light border-0" : "bg-white text-dark";
+
+  const getStatusColor = (status) => {
+    if (status === "DITERIMA") return "success";
+    if (status === "DITOLAK") return "danger";
+    if (status === "PENDING") return "warning";
+    return "secondary";
   };
 
-  if (loading) return <div className="text-center p-5">Memuat data...</div>;
+  const getStatusText = (status) => {
+    if (status === "PENDING") return "Data anda sedang kami verifikasi. harap tunggu informasi selanjutnya";
+    if (status === "DITERIMA") return "Selamat! Kamu diterima sebagai volunteer Rangers TI Batch 4 🎉";
+    if (status === "DITOLAK") return "Mohon maaf, kamu belum lolos 😔";
+    return "";
+  };
+
+  if (isLoading) return <div className="text-center p-5">Memuat data...</div>;
+  if (error) return <div className="alert alert-danger text-center">Gagal mengambil data 😢</div>;
+  if (!data) return <div className="text-center p-5">Data tidak ditemukan</div>;
+
+  const statusColor = getStatusColor(data.status);
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-lg-8">
-          {error && <div className="alert alert-danger">{error}</div>}
+    <div
+      className={`min-vh-100 d-flex justify-content-center align-items-center ${themeClass}`}
+      style={{
+        background: activeDark
+          ? "linear-gradient(135deg, #0a192f, #112240)"
+          : "linear-gradient(135deg, #e3f2fd, #bbdefb)",
+        transition: "all 0.5s ease",
+      }}
+    >
+      <div
+        className={`card shadow-lg rounded-4 animate__animated animate__fadeInUp ${cardClass}`}
+        style={{ maxWidth: "700px", width: "100%" }}
+      >
+        {/* HEADER */}
+        <div
+          className={`card-header d-flex justify-content-between align-items-center rounded-top-4 ${
+            activeDark ? "bg-primary-subtle text-light" : "bg-primary text-white"
+          }`}
+        >
+          <h5 className="mb-0 fw-semibold">Status Pendaftaran Kamu</h5>
+          <div className="d-flex align-items-center gap-2">
+            <button
+              className="btn btn-sm btn-outline-light"
+              onClick={() => setDarkMode(!activeDark)}
+              title="Ganti Tema"
+            >
+              <i className={`bi ${activeDark ? "bi-sun-fill" : "bi-moon-fill"}`}></i>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="btn btn-sm btn-danger d-flex align-items-center gap-1"
+            >
+              <i className="bi bi-box-arrow-right"></i> Logout
+            </button>
+          </div>
+        </div>
 
-          <div className="card shadow border-0">
-            <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-              <h4 className="mb-0">Status Pendaftaran Kamu</h4>
-              <button onClick={handleLogout} className="btn btn-danger btn-sm">
-                Logout
-              </button>
-            </div>
+        {/* BODY */}
+        <div className="card-body text-center p-5">
+          <h2 className="fw-bold mb-1 animate__animated animate__fadeInDown">{data.nama}</h2>
+          <p className="text-warning mb-4 animate__animated animate__fadeInDown animate__delay-1s">
+            {data.email} | {data.npm}
+          </p>
 
-            {data && (
-              <div className="card-body p-4">
-                <div className="text-center mb-4">
-                  <h2 className="fw-bold">{data.nama_lengkap}</h2>
-                  <p className="text-muted mb-0">
-                    {data.email} | {data.npm}
-                  </p>
-                </div>
+          {/* STATUS */}
+          <div
+            className={`rounded-4 py-4 mb-5 border animate__animated animate__fadeInUp animate__delay-1s ${
+              activeDark ? "bg-dark-subtle" : "bg-light"
+            }`}
+          >
+            <p className="fw-semibold mb-2">STATUS PENDAFTARAN:</p>
+            <span
+              className={`badge bg-${statusColor} fs-6 px-4 py-2 ${
+                data.status === "PENDING" ? "pending-glow" : ""
+              }`}
+            >
+              {data.status}
+            </span>
+            <p className="mt-3 text-muted small">{getStatusText(data.status)}</p>
 
-                <div className="text-center p-4 bg-light rounded mb-4">
-                  <h5 className="text-muted mb-2">STATUS PENDAFTARAN:</h5>
-                  <span className={getStatusBadge(data.status)}>
-                    {data.status}
-                  </span>
-                </div>
-
-                <h5 className="mt-4">Detail Pendaftaran:</h5>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>Pilihan Divisi:</span>
-                    <strong>{data.divisi_pilihan}</strong>
-                  </li>
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>Alasan Bergabung:</span>
-                    <strong>{data.alasan_bergabung}</strong>
-                  </li>
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>Tanggal Daftar:</span>
-                    <strong>
-                      {new Date(data.createdAt).toLocaleDateString("id-ID")}
-                    </strong>
-                  </li>
-                </ul>
+            {/* === Jika DITERIMA tampilkan tombol WA === */}
+            {data.status === "DITERIMA" && (
+              <div className="mt-4">
+                <a
+                  href="https://wa.me/6281234567890?text=Halo%20panitia,%20saya%20telah%20dinyatakan%20DITERIMA%20dan%20ingin%20konfirmasi%20."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-success d-flex align-items-center justify-content-center gap-2 mx-auto px-4 py-2 animate__animated animate__fadeInUp animate__delay-1s"
+                  style={{ borderRadius: "30px", fontWeight: "600" }}
+                >
+                  <i className="bi bi-whatsapp"></i>
+                  Hubungi Panitia via WhatsApp
+                </a>
               </div>
             )}
           </div>
+
+          {/* PROGRESS */}
+          <div className="mb-5">
+            <h6 className="fw-semibold mb-2">Progres Seleksi</h6>
+            <div className="progress" style={{ height: "12px" }}>
+              <div
+                className={`progress-bar bg-${statusColor}`}
+                style={{
+                  width:
+                    data.status === "PENDING"
+                      ? "30%"
+                      : data.status === "DITERIMA"
+                      ? "100%"
+                      : "100%",
+                  transition: "width 1s ease",
+                }}
+              ></div>
+            </div>
+          </div>
+
+          {/* DETAIL */}
+          <div
+            className={`border rounded-4 shadow-sm p-4 animate__animated animate__fadeInUp animate__delay-2s ${
+              activeDark ? "bg-dark-subtle" : "bg-white"
+            }`}
+          >
+            <h5 className="fw-semibold mb-4 text-center">Detail Pendaftaran</h5>
+            <ul className="list-unstyled mb-0">
+              <li className="d-flex justify-content-between border-bottom pb-3 mb-3">
+                <span className="text-muted">Tanggal Daftar</span>
+                <span className="fw-medium">
+                  {new Date(data.createdAt).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
+              </li>
+              <li className="d-flex justify-content-between border-bottom pb-3 mb-3">
+                <span className="text-muted">Nama Lengkap</span>
+                <span className="fw-medium">{data.nama_lengkap}</span>
+              </li>
+              <li className="d-flex justify-content-between border-bottom pb-3 mb-3">
+                <span className="text-muted">Pilihan Divisi</span>
+                <span className="fw-medium">{data.divisi_pilihan}</span>
+              </li>
+              <li className="d-flex justify-content-between">
+                <span className="text-muted">Alasan Bergabung</span>
+                <span
+                  className="fw-medium text-end"
+                  style={{ maxWidth: "60%", lineHeight: "1.6" }}
+                >
+                  {data.alasan_bergabung}
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Tombol Refresh Manual */}
+          <button
+            onClick={() => mutate()}
+            className="btn btn-outline-primary mt-4"
+          >
+            🔄 Refresh Sekarang
+          </button>
         </div>
       </div>
     </div>
   );
 }
-
-export default VolunteerStatus;

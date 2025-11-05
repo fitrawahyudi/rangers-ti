@@ -23,6 +23,7 @@ app.post('/register', async (req, res) => {
   // console.log("DATA YANG DITERIMA DARI FRONTEND:", req.body);
   const {
     email,
+    username,
     password,
     nama_lengkap,
     npm,
@@ -36,7 +37,7 @@ app.post('/register', async (req, res) => {
 
   // // Validasi input yang lebih ketat
   // if (
-  //   !email || !password || !program_studi || !nama_lengkap || !npm || !angkatan || !no_wa ||
+  //   !username || !password || !program_studi || !nama_lengkap || !npm || !angkatan || !no_wa ||
   //   !divisi_pilihan ||bersedia || !alasan_bergabung
   // ) {
   //   return res.status(400).json({ error: 'Semua field wajib diisi' });
@@ -49,6 +50,7 @@ app.post('/register', async (req, res) => {
     // 2. Simpan volunteer ke database
     const newVolunteer = await prisma.volunteer.create({
       data: {
+        username,
         email,
         password: hashedPassword,
         nama_lengkap,
@@ -71,10 +73,10 @@ app.post('/register', async (req, res) => {
 
   } catch (error) {
     console.error("PRISMA GAGAL:", error);
-    // Tangani error unik (email atau NIM sudah terdaftar)
+    // Tangani error unik (username atau NIM sudah terdaftar)
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        const field = error.meta.target.includes('email') ? 'Email' : 'NPM';
+        const field = error.meta.target.includes('username') ? 'Username' : 'NPM';
         return res.status(409).json({ error: `${field} ini sudah terdaftar.` });
       }
     }
@@ -89,23 +91,22 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// backend/index.js ... (Lanjutan)
-// ... (const jwt = require('jsonwebtoken');)
 // ... (const JWT_SECRET = ...;)
-const JWT_SECRET = process.env.JWT_SECRET || 'RAHASIA-SUPER-AMAN-GANTI-INI';
-// === ENDPOINT VOLUNTEER (BARU) ===
+const JWT_SECRET = process.env.JWT_SECRET || 'FWD201104@@UDI';
 
-// 1. Volunteer Login
+
+// === ENDPOINT VOLUNTEER ===
+
 app.post('/volunteer/login', async (req, res) => {
-  const { email, password } = req.body;
-
+  const { username, password } = req.body;
+  console.log(req.body)
   try {
     const volunteer = await prisma.volunteer.findUnique({
-      where: { email },
+      where: { username },
     });
 
     if (!volunteer) {
-      return res.status(404).json({ error: 'Email tidak ditemukan' });
+      return res.status(404).json({ error: 'Username tidak ditemukan' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, volunteer.password);
@@ -115,7 +116,7 @@ app.post('/volunteer/login', async (req, res) => {
 
     // Buat Token JWT khusus Volunteer
     const token = jwt.sign(
-      { volunteerId: volunteer.id, email: volunteer.email }, // Payload beda
+      { volunteerId: volunteer.id, username: volunteer.username }, // Payload beda
       JWT_SECRET,
       { expiresIn: '8h' }
     );
@@ -129,12 +130,6 @@ app.post('/volunteer/login', async (req, res) => {
   }
 });
 
-// 2. Middleware otentikasi (KHUSUS VOLUNTEER)
-// backend/index.js
-
-// ... (kode import lainnya)
-
-// GANTI FUNGSI LAMA KAMU DENGAN YANG INI
 const authenticateVolunteer = (req, res, next) => {
   console.log("\n--- [Middleware authenticateVolunteer] Dijalankan ---"); // Log 1
 
@@ -170,12 +165,8 @@ const authenticateVolunteer = (req, res, next) => {
   });
 };
 
-// ... (sisa kodemu, seperti /volunteer/me, /admin/login, dll)
 
-// 3. Endpoint untuk cek status (Protected)
-// backend/index.js
-
-// 3. Endpoint untuk cek status (Protected)
+// Endpoint untuk cek status (Protected)
 app.get('/volunteer/me', authenticateVolunteer, async (req, res) => {
   // Middleware 'authenticateVolunteer' SUDAH SELESAI di titik ini
 
@@ -191,6 +182,7 @@ app.get('/volunteer/me', authenticateVolunteer, async (req, res) => {
         id: true,
         nama_lengkap: true,
         email: true,
+        username: true,
         npm: true,
         status: true,
         alasan_bergabung: true,
@@ -220,11 +212,11 @@ app.get('/volunteer/me', authenticateVolunteer, async (req, res) => {
 
 // 1. Admin Login
 app.post('/admin/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
     const admin = await prisma.admin.findUnique({
-      where: { email },
+      where: { username },
     });
 
     if (!admin) {
@@ -240,7 +232,7 @@ app.post('/admin/login', async (req, res) => {
 
     // Buat Token JWT
     const token = jwt.sign(
-      { adminId: admin.id, email: admin.email },
+      { adminId: admin.id, email: admin.username },
       JWT_SECRET,
       { expiresIn: '8h' } // Token berlaku 8 jam
     );
@@ -335,7 +327,7 @@ app.get('/admin/me', authenticateAdmin, async (req, res) => {
       // Kita hanya pilih data yang aman untuk dikirim
       select: {
         id: true,
-        email: true,
+        username: true,
         name: true // Ini yang kita butuhkan
       }
     });

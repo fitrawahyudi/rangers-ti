@@ -1,0 +1,27 @@
+.bg-dark-custom {
+  background-color: #0a192f !important;
+  color: #e6f1ff !important;
+}
+
+.bg-dark-card {
+  background-color: #112240 !important;
+  color: #e6f1ff !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ✨ Efek glow untuk status Pending */
+.pending-glow {
+  animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
+  }
+}

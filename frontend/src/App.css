@@ -1,42 +1,189 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.table-container {
+  width: 95%;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+th {
+  background-color: #f4f6f8;
+  font-weight: bold;
+}
+
+/* --- Styling Baris --- */
+
+/* Baris utama */
+.main-row {
+  background-color: #ffffff;
+}
+
+/* Baris utama saat di-hover, kecuali baris detail */
+.main-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* Baris detail */
+.detail-row td {
+  background-color: #fdfdfd;
+  border-top: 1px solid #eee;
+}
+
+/* Konten di dalam baris detail */
+.detail-content {
+  padding: 16px;
+  background-color: #fafafa;
+}
+
+.detail-content h4 {
+  margin-top: 0;
+  color: #333;
+}
+.detail-content ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+.detail-content li {
+  padding: 4px 0;
+}
+
+/* --- Styling Tombol --- */
+
+.expand-button {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #555;
+  line-height: 20px; /* Untuk menengahkan '+' */
+}
+
+.expand-button:hover {
+  background-color: #f0f0f0;
+}
+
+.action-button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.action-button.delete {
+  background-color: #dc3545; /* Merah */
+}
+.action-button.delete:hover {
+  background-color: #c82333;
+}
+/* ... CSS dari contoh sebelumnya ... */
+
+/* Styling untuk tombol di dalam tabel */
+.action-button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  margin-right: 5px; /* Beri jarak antar tombol */
+}
+
+.action-button.view {
+  background-color: #007bff; /* Biru */
+}
+.action-button.view:hover {
+  background-color: #0069d9;
+}
+
+.action-button.delete {
+  background-color: #dc3545; /* Merah */
+}
+.action-button.delete:hover {
+  background-color: #c82333;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.hero {
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 123, 255, 0.5);
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
 }
 
 .card {
-  padding: 2em;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+/* .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba( */
+
+/* Efek 3D untuk Team Cards */
+.team-card {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.team-photo {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: perspective(1000px) rotateX(10deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 123, 255, 0.2);
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.team-card:hover .team-photo {
+  transform: perspective(1000px) translateY(-10px) rotateX(0deg);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 123, 255, 0.4);
+}
+
+/* Responsivitas: Kurangi efek di mobile */
+@media (max-width: 768px) {
+  .team-photo {
+    transform: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  .team-card:hover .team-photo {
+    transform: translateY(-5px);
+  }
+}
+
+.gallery-item-img {
+  width: 100%;
+  height: 250px; /* Atur tinggi yang Anda inginkan, ini akan membuat semua gambar setinggi ini */
+  object-fit: cover; /* Ini penting: mengisi ruang tanpa mengubah rasio asli, tapi mungkin memotong bagian gambar */
+  object-position: center; /* Fokus di tengah gambar */
 }

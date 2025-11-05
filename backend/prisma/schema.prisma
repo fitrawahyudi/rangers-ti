@@ -16,7 +16,7 @@ datasource db {
 // Model untuk tabel User
 model Admin {
   id        Int      @id @default(autoincrement())
-  username  String
+  username  String   @unique
   email     String   @unique // Email harus unik
   name      String? // Nama bersifat opsional (ditandai '?')
   password  String // Kita akan simpan password yang sudah di-hash
@@ -24,7 +24,6 @@ model Admin {
 }
 
 enum Divisi {
-  VOLUNTEER
   MC
   PEMATERI
   PEMBACA_DOA
@@ -45,7 +44,8 @@ enum StatusPendaftaran {
 // Model untuk tabel Volunteer
 model Volunteer {
   id       Int    @id @default(autoincrement())
-  email    String @unique // Email untuk login
+  username String @unique // Username untuk login
+  email    String @unique
   password String // Password yang sudah di-hash
 
   // Data Diri Volunteer

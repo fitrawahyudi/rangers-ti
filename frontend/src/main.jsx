@@ -7,15 +7,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import 'sweetalert2/dist/sweetalert2.min.css';
+import "sweetalert2/dist/sweetalert2.min.css";
 
 // Import halaman-halamanmu
 import PublicForm from "./pages/PublicForm";
-// (Kamu perlu buat file-file di bawah ini)
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import VolunteerLogin from "./pages/VolunteerLogin"; // BARU
 import VolunteerStatus from "./pages/VolunteerStatus"; // BARU
+import VolunteerForm from "./VolunteerForm.jsx";
 
 // Import Proteksi
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; // Ganti nama
@@ -27,6 +27,10 @@ import NotFoundPage from "./pages/NotFoundPages.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <App />,
+  },
+  {
+    path: "/daftar-batch-4",
     element: <PublicForm />,
   },
   {
