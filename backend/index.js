@@ -23,6 +23,10 @@ app.use(
 );
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({ message: "Backend is running ✅" });
+});
+
 // Endpoint untuk registrasi volunteer baru
 app.post('/register', async (req, res) => {
   // console.log("DATA YANG DITERIMA DARI FRONTEND:", req.body);
