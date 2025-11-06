@@ -5,7 +5,7 @@
 frontend/dist
 
 # File 'env' lokal frontend (jika ada)
-frontend/.env.local
+frontend/.env
 
 # File log
 npm-debug.log*
