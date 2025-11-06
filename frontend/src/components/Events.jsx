@@ -7,7 +7,7 @@ const Events = () => {
       title: "Rangers TI Batch 4",
       date: "16 November 2025",
       description: "Pengabdian masyarakat di panti asuhan.",
-      image: "../../public/img/events/batch4.jpg",
+      image: "/img/events/batch4.jpg",
     },
   ];
 
@@ -32,9 +32,7 @@ const Events = () => {
                   </p>
                   <p className="card-text">{event.description}</p>
                   <Link to="/daftar-batch-4">
-                    <button className="btn btn-primary">
-                      Daftar
-                    </button>
+                    <button className="btn btn-primary">Daftar</button>
                   </Link>
                 </div>
               </div>

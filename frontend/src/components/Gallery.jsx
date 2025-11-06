@@ -3,16 +3,16 @@ import "../App.css";
 
 const Gallery = () => {
   const imagesBatch1 = [
-    "../../public/img/gallery/batch1-1.jpg",
-    "../../public/img/gallery/batch1-2.jpg",
-    "../../public/img/gallery/batch1-3.jpg",
-    "../../public/img/gallery/batch1-4.jpg",
+    "/img/gallery/batch1-1.jpg",
+    "/img/gallery/batch1-2.jpg",
+    "/img/gallery/batch1-3.jpg",
+    "/img/gallery/batch1-4.jpg",
   ];
   const imagesBatch2 = [
-    "../../public/img/gallery/batch2-1.jpg",
-    "../../public/img/gallery/batch2-2.jpg",
-    "../../public/img/gallery/batch2-3.jpg",
-    "../../public/img/gallery/batch2-4.jpg",
+    "/img/gallery/batch2-1.jpg",
+    "/img/gallery/batch2-2.jpg",
+    "/img/gallery/batch2-3.jpg",
+    "/img/gallery/batch2-4.jpg",
   ];
 
   return (
