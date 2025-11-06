@@ -6,25 +6,25 @@
 //       name: "Putri Pebriani",
 //       role: "Ketua Panitia",
 //       bio: "Ahli dalam pengembangan web dan pemimpin acara.",
-//       photo: "../../public/img/team/putri.png",
+//       photo: "/img/team/putri.png",
 //     },
 //     {
 //       name: "Irsan",
 //       role: "Sekretaris",
 //       bio: "Spesialis komunikasi dan manajemen data.",
-//       photo: "../../public/img/team/irsan.png",
+//       photo: "/img/team/irsan.png",
 //     },
 //     {
 //       name: "Raizara",
 //       role: "Bendahara",
 //       bio: "Ahli keuangan dan sponsor organisasi.",
-//       photo: "../../public/img/team/raizara.png",
+//       photo: "/img/team/raizara.png",
 //     },
 //     {
 //       name: "Fitra Wahyudi Dalimunthe",
 //       role: "Koordinator Acara",
 //       bio: "Pengalaman dalam event planning TI.",
-//       photo: "../../public/img/team/fitra.png",
+//       photo: "/img/team/fitra.png",
 //     },
 //   ];
 
@@ -64,25 +64,25 @@ const Team = () => {
       name: "Putri Pebriani",
       role: "Ketua Panitia",
       bio: "Ahli dalam pengembangan web dan pemimpin acara.",
-      photo: "../../public/img/team/putri.png",
+      photo: "/img/team/putri.png",
     },
     {
       name: "Irsan",
       role: "Sekretaris",
       bio: "Spesialis komunikasi dan manajemen data.",
-      photo: "../../public/img/team/irsan.png",
+      photo: "/img/team/irsan.png",
     },
     {
       name: "Raizara",
       role: "Bendahara",
       bio: "Ahli keuangan dan sponsor organisasi.",
-      photo: "../../public/img/team/raizara.png",
+      photo: "/img/team/raizara.png",
     },
     {
       name: "Fitra Wahyudi Dalimunthe",
       role: "Koordinator Acara",
       bio: "Pengalaman dalam event planning TI.",
-      photo: "../../public/img/team/fitra.png",
+      photo: "/img/team/fitra.png",
     },
   ];
 
