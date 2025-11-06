@@ -28,7 +28,7 @@ async function main() {
     data: {
       username: adminUsername,
       password: hashedPassword,
-      adminEmail: adminEmail
+      email: adminEmail
       // tambahkan field lain jika wajib, misal 'name'
       // name: 'Admin Utama' 
     },
