@@ -8,10 +8,10 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Memulai proses seeding...');
 
-  // --- GANTI DATA INI ---
-  const adminUsername = 'admin'; // Ganti dengan username admin yang kamu mau
-  const adminPassword = 'admin'; // Ganti dengan password yang kamu mau
-  const adminEmail = 'fitrawahyudi739@gmail.com'; // Ganti dengan password yang kamu mau
+  const adminName = "Fitra Wahyudi Dalimunthe"
+  const adminUsername = 'fwd201104'; 
+  const adminPassword = 'fwd201104';
+  const adminEmail = 'fitrawahyudi739@gmail.com'; 
   // -----------------------
 
   // Hash password
@@ -26,6 +26,7 @@ async function main() {
   // Buat admin baru
   const newAdmin = await prisma.admin.create({
     data: {
+      name: adminName,
       username: adminUsername,
       password: hashedPassword,
       email: adminEmail
