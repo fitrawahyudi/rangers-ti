@@ -20,7 +20,7 @@ function AdminLogin() {
 
     try {
       // 1. Panggil API login admin
-      const response = await axios.post(`${API_URL}/admin/login`, {
+      const response = await axios.post(`https://backend-rangers-ti.up.railway.app/admin/login`, {
         username,
         password,
       });
