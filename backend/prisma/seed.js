@@ -11,6 +11,7 @@ async function main() {
   // --- GANTI DATA INI ---
   const adminUsername = 'admin'; // Ganti dengan username admin yang kamu mau
   const adminPassword = 'admin'; // Ganti dengan password yang kamu mau
+  const adminEmail = 'fitrawahyudi739@gmail.com'; // Ganti dengan password yang kamu mau
   // -----------------------
 
   // Hash password
@@ -26,7 +27,8 @@ async function main() {
   const newAdmin = await prisma.admin.create({
     data: {
       username: adminUsername,
-      password: hashedPassword, // Kita pakai hash
+      password: hashedPassword,
+      adminEmail: adminEmail
       // tambahkan field lain jika wajib, misal 'name'
       // name: 'Admin Utama' 
     },
