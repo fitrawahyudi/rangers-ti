@@ -223,22 +223,29 @@ app.post('/admin/login', async (req, res) => {
       where: { username },
     });
 
-    if (!admin) {
-      return res.status(404).json({ error: 'Admin tidak ditemukan' });
+    // --- MULAI PERUBAHAN ---
+
+    // Jika admin tidak ditemukan, JANGAN langsung kirim error.
+    // Buat pengecekan password default yang akan gagal.
+    // Kita tetap jalankan bcrypt.compare untuk mencegah "Timing Attack".
+    const a = "password_asal_yang_pasti_salah";
+    const passwordHash = admin ? admin.password : await bcrypt.hash(a, 10); 
+
+    const isPasswordValid = await bcrypt.compare(password, passwordHash);
+
+    // Sekarang, kita gabungkan kedua kondisi
+    if (!admin || !isPasswordValid) {
+      // Kirim satu pesan error yang umum
+      return res.status(401).json({ error: 'Username atau password salah' });
     }
 
-    // Bandingkan password yang di-input dengan hash di database
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Password salah' });
-    }
+    // --- SELESAI PERUBAHAN ---
 
     // Buat Token JWT
     const token = jwt.sign(
       { adminId: admin.id, username: admin.username },
       JWT_SECRET,
-      { expiresIn: '8h' } // Token berlaku 8 jam
+      { expiresIn: '8h' }
     );
 
     res.json({
