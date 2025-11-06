@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // Buat instance axios untuk volunteer
 const volunteerApi = axios.create({
-  baseURL: "https://backend-rangers-ti.up.railway.app/",
+  baseURL: "https://backend-rangers-ti.up.railway.app",
 });
 
 // Interceptor token

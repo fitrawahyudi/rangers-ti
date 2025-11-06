@@ -1,7 +1,3 @@
-// const express = require('express');
-// const cors = require('cors');
-// const bcrypt = require('bcryptjs');
-// const { PrismaClient } = require('@prisma/client');
 import express from 'express'
 import cors from 'cors'
 import bcrypt from 'bcryptjs'
@@ -15,15 +11,20 @@ const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["https://rangers-ti.vercel.app", "http://localhost:5173"],
+    credentials: true,
+  })
+);
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.json({ message: "Backend is running ✅" });
+});
 
 // Endpoint untuk registrasi volunteer baru
 app.post('/register', async (req, res) => {
-  // console.log("DATA YANG DITERIMA DARI FRONTEND:", req.body);
   const {
     email,
     username,

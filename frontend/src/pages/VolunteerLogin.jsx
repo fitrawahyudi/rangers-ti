@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-const API_URL = "https://backend-rangers-ti.up.railway.app/";
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : import.meta.env.VITE_API_URL;
+
 function VolunteerLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,13 +19,10 @@ function VolunteerLogin() {
     setError("");
     try {
       // Panggil endpoint login VOLUNTEER
-      const response = await axios.post(
-        "http://localhost:5000/volunteer/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${API_URL}/volunteer/login`, {
+        username,
+        password,
+      });
 
       // Simpan token di localStorage (gunakan nama beda!)
       localStorage.setItem("volunteerToken", response.data.token);

@@ -3,7 +3,7 @@ import "../App.css";
 
 const Gallery = () => {
   const imagesBatch1 = [
-    "../../public/img/gallery/batch1-1.JPG",
+    "../../public/img/gallery/batch1-1.jpg",
     "../../public/img/gallery/batch1-2.jpg",
     "../../public/img/gallery/batch1-3.jpg",
     "../../public/img/gallery/batch1-4.jpg",
