@@ -7,7 +7,7 @@ const Hero = () => {
       id="home"
       className="hero d-flex align-items-center text-white"
       style={{
-        backgroundImage: "url(/img/hero.jpg)",
+        backgroundImage: "url(/img/banner.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "80vh",
