@@ -25,13 +25,13 @@ const Contacts = () => {
           <div className="col-md-6">
             <h5>Informasi Kontak</h5>
             <p>
-              <i className="bi bi-envelope me-2"></i>info@rangersti.com
+              <i className="bi bi-envelope me-2"></i>rangersti@gmail.com
             </p>
             <p>
-              <i className="bi bi-phone me-2"></i>+62 123 456 789
+              <i className="bi bi-phone me-2"></i>+62 851 4313 8370
             </p>
             <p>
-              <i className="bi bi-geo-alt me-2"></i>Jakarta, Indonesia
+              <i className="bi bi-geo-alt me-2"></i>Medan, Indonesia
             </p>
           </div>
           <div className="col-md-6">

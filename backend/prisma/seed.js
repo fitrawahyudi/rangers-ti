@@ -8,7 +8,7 @@ async function main() {
 
   // --- GANTI DATA INI ---
   const adminUsername = 'admin'; // Ganti dengan username admin yang kamu mau
-  const adminPassword = 'password123'; // Ganti dengan password yang kamu mau
+  const adminPassword = 'admin'; // Ganti dengan password yang kamu mau
   // -----------------------
 
   // Hash password
