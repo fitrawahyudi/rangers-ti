@@ -236,7 +236,7 @@ app.post('/admin/login', async (req, res) => {
 
     // Buat Token JWT
     const token = jwt.sign(
-      { adminId: admin.id, email: admin.username },
+      { adminId: admin.id, username: admin.username },
       JWT_SECRET,
       { expiresIn: '8h' } // Token berlaku 8 jam
     );
