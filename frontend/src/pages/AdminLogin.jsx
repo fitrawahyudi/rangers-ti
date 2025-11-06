@@ -5,8 +5,14 @@ import { useNavigate, Link } from "react-router-dom";
 
 const API_URL =
   import.meta.env.MODE === "development"
+<<<<<<< HEAD
     ? "http://localhost:5000"
     : import.meta.env.VITE_API_URL;
+=======
+    ? "http://localhost:8080"
+    : import.meta.env.VITE_API_URL;
+
+>>>>>>> 6fabef0c3d28e8b17a46b65c736dae4c38ec1cab
 function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
