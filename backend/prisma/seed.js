@@ -19,27 +19,21 @@ async function main() {
   console.log('Password berhasil di-hash...');
 
   // Hapus admin lama jika ada (opsional, tapi bagus untuk testing)
-  
-  // Buat admin baru
-  const admin = await prisma.admin.upsert({
-    where: { email }, // <-- Ganti ini dengan field unik, misal 'username'
-    update: { // <-- Jika admin-nya ketemu, update ini
-      password: hashedPassword,
-      email: adminEmail, // (Kita update email juga, siapa tahu ganti)
-    },
-    create: { // <-- Jika admin-nya tidak ketemu, buat baru
-      name: adminName,
-      username: adminUsername,
-      password: hashedPassword,
-      email: adminEmail,
-    },
-  });
-  
   await prisma.admin.deleteMany({
     where: { username: adminUsername },
   });
 
-  console.log(`Berhasil membuat admin baru: ${admin.username}`);
+  // Buat admin baru
+  const newAdmin = await prisma.admin.create({
+    data: {
+      name: adminName,
+      username: adminUsername,
+      password: hashedPassword,
+      email: adminEmail
+    },
+  });
+
+  console.log(`Berhasil membuat admin baru: ${newAdmin.username}`);
   console.log('Seeding selesai.');
 }
 
