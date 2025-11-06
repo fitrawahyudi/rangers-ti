@@ -45,7 +45,7 @@ function PublicForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/register",
+        "https://backend-rangers-ti.up.railway.app/register",
         formData
       );
 
