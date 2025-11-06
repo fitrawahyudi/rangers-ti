@@ -22,7 +22,7 @@ async function main() {
   
   // Buat admin baru
   const admin = await prisma.admin.upsert({
-    where: { username }, // <-- Ganti ini dengan field unik, misal 'username'
+    where: { email }, // <-- Ganti ini dengan field unik, misal 'username'
     update: { // <-- Jika admin-nya ketemu, update ini
       password: hashedPassword,
       email: adminEmail, // (Kita update email juga, siapa tahu ganti)
