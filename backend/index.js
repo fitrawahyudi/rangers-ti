@@ -163,7 +163,7 @@ const authenticateVolunteer = (req, res, next) => {
     }
 
     // Jika semua aman
-    console.log("HASIL: SUKSES ✅ - Token terverifikasi untuk:", user.email); // Log 8
+    console.log("HASIL: SUKSES ✅ - Token terverifikasi untuk:", user.username); // Log 8
     req.volunteer = user; // Simpan data volunteer
     next();
   });
